@@ -7,6 +7,13 @@
     {
       "name": "test",
       "path": "test"
+    },
+    {
+      "path": ".AL-Go"
+    },
+    {
+      "name": "root",
+      "path": "."
     }
   ],
   "settings": {
@@ -25,12 +32,15 @@
       "${PerTenantExtensionCop}"
     ],
     "al.enableCodeAnalysis": true,
-    "al.rulesetPath": "Cop.ruleset.json",
-    "al.enableCodeActions": true
+    "al.enableExternalRulesets": true,
+    "al.ruleSetPath": "../custom.ruleset.json",
+    "al.enableCodeActions": true,
+    "cSpell.words": [
+      "Kiota"
+    ]
   },
   "extensions": {
     "recommendations": [
-      "cosmoconsult.cosmo-azure-devops",
       "ms-dynamics-smb.al",
       "waldo.crs-al-language-extension",
       "vscode-icons-team.vscode-icons"

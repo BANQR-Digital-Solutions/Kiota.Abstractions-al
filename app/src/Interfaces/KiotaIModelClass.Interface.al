@@ -1,6 +1,6 @@
-namespace SimonOfHH.Kiota.Definitions;
+namespace CABQR.Kiota.Definitions;
 
-interface "Kiota IModelClass SOHH"
+interface "Kiota IModelClass"
 {
     Access = public;
     procedure ToJson(): JsonObject;

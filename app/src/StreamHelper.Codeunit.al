@@ -1,9 +1,9 @@
-namespace SimonOfHH.Kiota.Utilities;
+namespace CABQR.Kiota.Utilities;
 
 using System.IO;
 using System.Text;
 using System.Utilities;
-codeunit 87100 "StreamHelper SOHH"
+codeunit 72337305 "StreamHelper"
 {
     Access = Public;
 
@@ -25,7 +25,7 @@ codeunit 87100 "StreamHelper SOHH"
         TempBlob.CreateInStream(FileInStream, TextEncoding::UTF8);
         if not UploadIntoStream('Upload file', '', '', FromFile, FileInStream) then
             exit(false);
-        FileAsText := GetFileContent(FileInStream, Codepage);
+        FileAsText := this.GetFileContent(FileInStream, Codepage);
         exit(true);
     end;
 

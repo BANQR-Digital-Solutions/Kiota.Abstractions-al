@@ -1,0 +1,32 @@
+{
+    "name": "BANQR Rules",
+    "description": "Banqr Digital Solutions Rules",
+    "includedRuleSets": [
+        {
+            "action": "Default",
+            "path": "https://raw.githubusercontent.com/StefanMaron/RulesetFiles/main/appsource.rulset.json"
+        }
+    ],
+    "rules": [
+        {
+            "id": "AA0248",
+            "action": "Warning",
+            "justification": "Use this. for local references"
+        },
+        {
+            "id": "AL0842",
+            "action": "None",
+            "justification": "Tables will stay internal for now"
+        },
+        {
+            "id": "AL0748",
+            "action": "None",
+            "justification": "Tables will stay internal for now"
+        },
+        {
+            "id": "LC0084",
+            "action": "None",
+            "justification": "Needs to get fixed in bulk first to adapt to the rule"
+        }
+    ]
+}

@@ -1,6 +1,6 @@
-namespace SimonOfHH.Kiota.Client;
+namespace CABQR.Kiota.Client;
 
-codeunit 87102 "Kiota API Authorization SOHH"
+codeunit 72337300 "Kiota API Authorization"
 {
     procedure IsInitialized(): Boolean
     begin

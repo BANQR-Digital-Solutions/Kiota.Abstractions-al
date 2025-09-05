@@ -1,9 +1,9 @@
-namespace SimonOfHH.Kiota.Utilities;
+namespace CABQR.Kiota.Utilities;
 
 using System.IO;
 using System.Text;
 using System.Utilities;
-codeunit 87104 "RequestHelper SOHH"
+codeunit 72337304 "RequestHelper"
 {
     procedure IsContentHeader(HeaderName: Text): Boolean
     begin

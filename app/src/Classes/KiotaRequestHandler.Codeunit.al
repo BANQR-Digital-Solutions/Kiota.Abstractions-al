@@ -1,87 +1,88 @@
-namespace SimonOfHH.Kiota.Client;
+namespace CABQR.Kiota.Client;
 
-using SimonOfHH.Kiota.Definitions;
-using SimonOfHH.Kiota.Utilities;
-codeunit 87103 "Kiota RequestHandler SoHH"
+using CABQR.Kiota.Definitions;
+using CABQR.Kiota.Utilities;
+codeunit 72337302 "Kiota RequestHandler"
 {
     var
-        ClientConfig: Codeunit "Kiota ClientConfig SOHH";
-        RequestHelper: Codeunit "RequestHelper SOHH";
-        RequestMsg: HttpRequestMessage;
-        Content: HttpContent;
+        ClientConfig: Codeunit "Kiota ClientConfig";
+        RequestHelper: Codeunit "RequestHelper";
+        BodySet,
+        RequestMsgSet : Boolean;
         Method: Enum System.RestClient."Http Method";
+        Content: HttpContent;
+        RequestMsg: HttpRequestMessage;
         BodyAsJson: JsonToken;
-        RequestMsgSet, BodySet : Boolean;
 
-    procedure SetClientConfig(var NewClientConfig: Codeunit "Kiota ClientConfig SOHH")
+    procedure SetClientConfig(var NewClientConfig: Codeunit "Kiota ClientConfig")
     begin
-        ClientConfig := NewClientConfig;
+        this.ClientConfig := NewClientConfig;
     end;
 
     procedure SetMethod(NewMethod: Enum System.RestClient."Http Method")
     begin
-        Method := NewMethod;
+        this.Method := NewMethod;
     end;
 
     procedure SetBody(NewContent: HttpContent)
     begin
-        Content := NewContent;
-        BodySet := true;
+        this.Content := NewContent;
+        this.BodySet := true;
     end;
 
-    procedure SetBody(Objects: List of [Interface "Kiota IModelClass SOHH"])
+    procedure SetBody(Objects: List of [Interface "Kiota IModelClass"])
     var
-        Object: Interface "Kiota IModelClass SOHH";
+        Object: Interface "Kiota IModelClass";
         JsonArray: JsonArray;
         JsonAsText: Text;
     begin
         foreach Object in Objects do
             JsonArray.Add(Object.ToJson());
         JsonArray.WriteTo(JsonAsText);
-        Content.WriteFrom(JsonAsText);
-        BodySet := true;
+        this.Content.WriteFrom(JsonAsText);
+        this.BodySet := true;
     end;
 
-    procedure SetBody(Object: Interface "Kiota IModelClass SOHH")
+    procedure SetBody(Object: Interface "Kiota IModelClass")
     var
         JsonAsText: Text;
     begin
-        BodyAsJson := Object.ToJson().AsToken();
-        BodyAsJson.WriteTo(JsonAsText);
-        Content.WriteFrom(JsonAsText);
-        BodySet := true;
+        this.BodyAsJson := Object.ToJson().AsToken();
+        this.BodyAsJson.WriteTo(JsonAsText);
+        this.Content.WriteFrom(JsonAsText);
+        this.BodySet := true;
     end;
 
     procedure SetBody(var NewReqMsg: HttpRequestMessage)
     begin
-        RequestMsg := NewReqMsg;
-        RequestMsgSet := true;
-        BodySet := true;
+        this.RequestMsg := NewReqMsg;
+        this.RequestMsgSet := true;
+        this.BodySet := true;
     end;
 
     local procedure RequestMsgToCodeunitObject() msg: Codeunit System.RestClient."Http Request Message"
     begin
-        msg.SetHttpRequestMessage(RequestMsg);
+        msg.SetHttpRequestMessage(this.RequestMsg);
     end;
 
     procedure RequestMessage(): Codeunit System.RestClient."Http Request Message"
     var
         Headers: HttpHeaders;
     begin
-        if RequestMsgSet then
-            exit(RequestMsgToCodeunitObject());
-        RequestMsg.Method := Format(Method);
-        RequestMsg.SetRequestUri(ClientConfig.BaseUrl());
-        if (ClientConfig.RequestHeaders().Count > 0) then begin
-            RequestMsg.GetHeaders(Headers);
-            RequestHelper.AddHeader(Headers, ClientConfig.RequestHeaders()); // Add custom headers
+        if this.RequestMsgSet then
+            exit(this.RequestMsgToCodeunitObject());
+        this.RequestMsg.Method := Format(this.Method);
+        this.RequestMsg.SetRequestUri(this.ClientConfig.BaseUrl());
+        if (this.ClientConfig.RequestHeaders().Count > 0) then begin
+            this.RequestMsg.GetHeaders(Headers);
+            this.RequestHelper.AddHeader(Headers, this.ClientConfig.RequestHeaders()); // Add custom headers
         end;
-        if (BodySet) then begin
-            RequestMsg.Content := Content;
-            RequestMsg.Content.GetHeaders(Headers);
-            RequestHelper.AddHeader(Headers, ClientConfig.ContentHeaders()); // Add custom headers
+        if (this.BodySet) then begin
+            this.RequestMsg.Content := this.Content;
+            this.RequestMsg.Content.GetHeaders(Headers);
+            this.RequestHelper.AddHeader(Headers, this.ClientConfig.ContentHeaders()); // Add custom headers
         end;
-        exit(RequestMsgToCodeunitObject());
+        exit(this.RequestMsgToCodeunitObject());
     end;
 
     procedure HandleRequest()
@@ -90,8 +91,8 @@ codeunit 87103 "Kiota RequestHandler SoHH"
         RqstMessage: Codeunit System.RestClient."Http Request Message";
         RspMessage: Codeunit System.RestClient."Http Response Message";
     begin
-        RqstMessage := RequestMessage();
+        RqstMessage := this.RequestMessage();
         RspMessage := RestClient.Send(RqstMessage);
-        ClientConfig.Client().Response(RspMessage);
+        this.ClientConfig.Client().Response(RspMessage);
     end;
 }

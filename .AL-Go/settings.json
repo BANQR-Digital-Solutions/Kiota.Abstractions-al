@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v7.2/settings.schema.json",
+  "country": "w1",
+  "appSourceCopMandatoryAffixes": [
+    "CABQR"
+  ],
+  "enableAppSourceCop": true,
+  "enableExternalRulesets": true,
+  "rulesetFile": "custom.ruleset.json",
+  "ghTokenWorkflowSecretName": "GHTOKENWORKFLOW",
+  "appFolders": [
+    "app"
+  ],
+  "bcptTestFolders": []
+}

@@ -1,8 +1,8 @@
-namespace SimonOfHH.Kiota.Utilities;
+namespace CABQR.Kiota.Utilities;
 
-using SimonOfHH.Kiota.Definitions;
+using CABQR.Kiota.Definitions;
 
-codeunit 87101 "JSON Helper SOHH"
+codeunit 72337303 "JSON Helper"
 {
     procedure JsonArrayToStringList(Token: JsonToken) Values: List of [Text]
     var
@@ -53,7 +53,7 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [Text])
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [Text]; Nullable: Boolean)
@@ -74,7 +74,7 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Dictionary of [Text, Text]; AsArray: Boolean)
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Dictionary of [Text, Text]; AsArray: Boolean; Nullable: Boolean)
@@ -86,7 +86,7 @@ codeunit 87101 "JSON Helper SOHH"
         if (JValue.Count = 0) and (not Nullable) then
             exit;
         if AsArray then begin
-            AddToObjectIfNotEmpty(TargetObject, JKey, JValue, Nullable);
+            this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, Nullable);
             exit;
         end;
 
@@ -99,15 +99,15 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Dictionary of [Text, Decimal])
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Dictionary of [Text, Decimal]; Nullable: Boolean)
     var
+        value: Decimal;
         jarray: JsonArray;
         jchildvalue: JsonObject;
         "key": Text;
-        value: Decimal;
     begin
         if (JValue.Count = 0) and (not Nullable) then
             exit;
@@ -120,14 +120,14 @@ codeunit 87101 "JSON Helper SOHH"
         TargetObject.Add(JKey, jarray);
     end;
 
-    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Interface "Kiota IModelClass SOHH")
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Interface "Kiota IModelClass")
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: JsonArray)
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: JsonArray; Nullable: Boolean)
@@ -158,27 +158,27 @@ codeunit 87101 "JSON Helper SOHH"
             TargetObject.Add(JKey, JValue);
     end;
 
-    procedure AddToArrayIfNotEmpty(var TargetArray: JsonArray; JValue: Interface "Kiota IModelClass SOHH")
+    procedure AddToArrayIfNotEmpty(var TargetArray: JsonArray; JValue: Interface "Kiota IModelClass")
     begin
-        AddToArrayIfNotEmpty(TargetArray, JValue, false);
+        this.AddToArrayIfNotEmpty(TargetArray, JValue, false);
     end;
 
-    procedure AddToArrayIfNotEmpty(var TargetArray: JsonArray; JValue: Interface "Kiota IModelClass SOHH"; Nullable: Boolean)
+    procedure AddToArrayIfNotEmpty(var TargetArray: JsonArray; JValue: Interface "Kiota IModelClass"; Nullable: Boolean)
     begin
-        if (not JsonFromCodeunitIsEmpty(JValue)) or Nullable then
+        if (not this.JsonFromCodeunitIsEmpty(JValue)) or Nullable then
             TargetArray.Add(JValue.ToJson());
     end;
 
-    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Interface "Kiota IModelClass SOHH"; Nullable: Boolean)
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Interface "Kiota IModelClass"; Nullable: Boolean)
     begin
-        if (not JsonFromCodeunitIsEmpty(JValue)) then
+        if (not this.JsonFromCodeunitIsEmpty(JValue)) then
             if (JKey = 'base') then
                 AddToObjectFromBaseObject(TargetObject, JValue)
             else
                 TargetObject.Add(JKey, JValue.ToJson());
     end;
 
-    local procedure AddToObjectFromBaseObject(var TargetObject: JsonObject; JValue: Interface "Kiota IModelClass SOHH")
+    local procedure AddToObjectFromBaseObject(var TargetObject: JsonObject; JValue: Interface "Kiota IModelClass")
     var
         JObject: JsonObject;
         JBaseValue: JsonToken;
@@ -195,7 +195,7 @@ codeunit 87101 "JSON Helper SOHH"
         end;
     end;
 
-    local procedure JsonFromCodeunitIsEmpty(JValue: Interface "Kiota IModelClass SOHH"): Boolean
+    local procedure JsonFromCodeunitIsEmpty(JValue: Interface "Kiota IModelClass"): Boolean
     var
         JToken: JsonToken;
         JKeys: List of [Text];
@@ -209,7 +209,7 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Integer)
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Integer; Nullable: Boolean)
@@ -220,7 +220,7 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Decimal)
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: Decimal; Nullable: Boolean)
@@ -231,7 +231,7 @@ codeunit 87101 "JSON Helper SOHH"
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: DateTime)
     begin
-        AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
     end;
 
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: DateTime; Nullable: Boolean)
@@ -248,5 +248,49 @@ codeunit 87101 "JSON Helper SOHH"
     procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: JsonToken)
     begin
         TargetObject.Add(JKey, JValue);
+    end;
+
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [BigInteger])
+    begin
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+    end;
+
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [BigInteger]; Nullable:
+    Boolean)
+    var
+        entry: BigInteger;
+        jarray: JsonArray;
+    begin
+        if JValue.Count > 0 then
+            if ((JValue.Count = 1) and (JValue.Get(1) = 0)) then
+                JValue.RemoveAt(1);
+        if (JValue.Count = 0) and (not Nullable) then
+            exit;
+        foreach entry in JValue do
+            if entry <> 0 then
+                jarray.Add(entry);
+        TargetObject.Add(JKey, jarray);
+    end;
+
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [Integer])
+    begin
+        this.AddToObjectIfNotEmpty(TargetObject, JKey, JValue, false);
+    end;
+
+    procedure AddToObjectIfNotEmpty(var TargetObject: JsonObject; JKey: Text; JValue: List of [Integer]; Nullable:
+    Boolean)
+    var
+        entry: Integer;
+        jarray: JsonArray;
+    begin
+        if JValue.Count > 0 then
+            if ((JValue.Count = 1) and (JValue.Get(1) = 0)) then
+                JValue.RemoveAt(1);
+        if (JValue.Count = 0) and (not Nullable) then
+            exit;
+        foreach entry in JValue do
+            if entry <> 0 then
+                jarray.Add(entry);
+        TargetObject.Add(JKey, jarray);
     end;
 }

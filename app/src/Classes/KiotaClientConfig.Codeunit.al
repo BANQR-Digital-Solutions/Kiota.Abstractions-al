@@ -1,71 +1,71 @@
-namespace SimonOfHH.Kiota.Client;
+namespace CABQR.Kiota.Client;
 
-using SimonOfHH.Kiota.Definitions;
-using SimonOfHH.Kiota.Utilities;
+using CABQR.Kiota.Definitions;
+using CABQR.Kiota.Utilities;
 
-codeunit 87107 "Kiota ClientConfig SOHH"
+codeunit 72337301 "Kiota ClientConfig"
 {
     var
-        _Authorization: Codeunit "Kiota API Authorization SOHH";
-        _RequestHelper: Codeunit "RequestHelper SOHH";
-        _BaseURL: Text;
-        _Client: Interface "Kiota IApiClient SOHH";
+        _Authorization: Codeunit "Kiota API Authorization";
+        _RequestHelper: Codeunit "RequestHelper";
         _CustomHeaders: Dictionary of [Text, Text];
+        _Client: Interface "Kiota IApiClient";
+        _BaseURL: Text;
 
     procedure BaseURL(URL: Text)
     begin
-        _BaseURL := URL;
+        this._BaseURL := URL;
     end;
 
     procedure BaseURL(): Text
     begin
-        exit(_BaseURL);
+        exit(this._BaseURL);
     end;
 
     procedure AppendBaseURL(Append: Text)
     begin
-        if _BaseURL = '' then
-            _BaseURL := Append
+        if this._BaseURL = '' then
+            this._BaseURL := Append
         else
-            _BaseURL := _BaseURL + Append;
+            this._BaseURL := this._BaseURL + Append;
     end;
 
     procedure IsInitialized(): Boolean
     begin
-        exit(_Authorization.IsInitialized());
+        exit(this._Authorization.IsInitialized());
     end;
 
-    procedure Authorization(NewAuthorization: Codeunit "Kiota API Authorization SOHH")
+    procedure Authorization(NewAuthorization: Codeunit "Kiota API Authorization")
     begin
-        _Authorization := NewAuthorization;
+        this._Authorization := NewAuthorization;
     end;
 
-    procedure Authorization(): Codeunit "Kiota API Authorization SOHH"
+    procedure Authorization(): Codeunit "Kiota API Authorization"
     begin
-        exit(_Authorization);
+        exit(this._Authorization);
     end;
 
-    procedure Client(): Interface "Kiota IApiClient SOHH"
+    procedure Client(): Interface "Kiota IApiClient"
     begin
-        exit(_Client);
+        exit(this._Client);
     end;
 
-    procedure Client(NewApiClient: Interface "Kiota IApiClient SOHH")
+    procedure Client(NewApiClient: Interface "Kiota IApiClient")
     begin
-        _Client := NewApiClient;
+        this._Client := NewApiClient;
     end;
 
     procedure AddHeader(HeaderName: Text; HeaderValue: Text)
     begin
-        if not _CustomHeaders.ContainsKey(HeaderName) then
-            _CustomHeaders.Add(HeaderName, HeaderValue)
+        if not this._CustomHeaders.ContainsKey(HeaderName) then
+            this._CustomHeaders.Add(HeaderName, HeaderValue)
         else
-            _CustomHeaders.Set(HeaderName, HeaderValue);
+            this._CustomHeaders.Set(HeaderName, HeaderValue);
     end;
 
     procedure CustomHeaders(): Dictionary of [Text, Text]
     begin
-        exit(_CustomHeaders);
+        exit(this._CustomHeaders);
     end;
 
     procedure RequestHeaders(): Dictionary of [Text, Text]
@@ -73,9 +73,9 @@ codeunit 87107 "Kiota ClientConfig SOHH"
         NewHeaders: Dictionary of [Text, Text];
         HeaderName, HeaderValue : Text;
     begin
-        foreach HeaderName in _CustomHeaders.Keys() do begin
-            HeaderValue := _CustomHeaders.Get(HeaderName);
-            if not _RequestHelper.IsContentHeader(HeaderName) then
+        foreach HeaderName in this._CustomHeaders.Keys() do begin
+            HeaderValue := this._CustomHeaders.Get(HeaderName);
+            if not this._RequestHelper.IsContentHeader(HeaderName) then
                 NewHeaders.Add(HeaderName, HeaderValue);
         end;
         exit(NewHeaders);
@@ -86,9 +86,9 @@ codeunit 87107 "Kiota ClientConfig SOHH"
         NewHeaders: Dictionary of [Text, Text];
         HeaderName, HeaderValue : Text;
     begin
-        foreach HeaderName in _CustomHeaders.Keys() do begin
-            HeaderValue := _CustomHeaders.Get(HeaderName);
-            if _RequestHelper.IsContentHeader(HeaderName) then
+        foreach HeaderName in this._CustomHeaders.Keys() do begin
+            HeaderValue := this._CustomHeaders.Get(HeaderName);
+            if this._RequestHelper.IsContentHeader(HeaderName) then
                 NewHeaders.Add(HeaderName, HeaderValue);
         end;
         exit(NewHeaders);
