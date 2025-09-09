@@ -1,5 +1,5 @@
 {
-  "id": "c24a2609-e5c2-4702-b734-db13e5a6594c",
+  "id": "fa343312-ec9d-4d0a-a8bd-733e2d4e8ffa",
   "name": "Kiota.Abstractions",
   "publisher": "BANQR Digital Solutions GmbH",
   "version": "1.0.0.0",
@@ -18,7 +18,7 @@
     {
       "id": "d007a494-ceda-4c80-bece-497cd88cf596",
       "name": "Kiota.Abstractions-Tests",
-      "publisher": "SimonOfHH"
+      "publisher": "BANQR Digital Solutions GmbH",
     }
   ],
   "application": "25.0.0.0",
