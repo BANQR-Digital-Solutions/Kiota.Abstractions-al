@@ -72,7 +72,7 @@ codeunit 72337302 "Kiota RequestHandler"
         if this.RequestMsgSet then
             exit(this.RequestMsgToCodeunitObject());
         this.RequestMsg.Method := Format(this.Method);
-        this.RequestMsg.SetRequestUri(this.ClientConfig.BaseUrl());
+        this.RequestMsg.SetRequestUri(this.ClientConfig.BaseUrlWithParams());
         if (this.ClientConfig.RequestHeaders().Count > 0) then begin
             this.RequestMsg.GetHeaders(Headers);
             this.RequestHelper.AddHeader(Headers, this.ClientConfig.RequestHeaders()); // Add custom headers
@@ -85,12 +85,83 @@ codeunit 72337302 "Kiota RequestHandler"
         exit(this.RequestMsgToCodeunitObject());
     end;
 
+    procedure AddQueryParameter(ParamKey: Text; Value: Text)
+    begin
+        if (ParamKey = '') or (Value = '') then
+            exit;
+        this.ClientConfig.AddQueryParameter(ParamKey, Value);
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: Boolean)
+    var
+        BooleanText: Text;
+    begin
+        if ParamKey = '' then
+            exit;
+        if Value then
+            BooleanText := 'true'
+        else
+            BooleanText := 'false';
+        this.ClientConfig.AddQueryParameter(ParamKey, BooleanText);
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: Integer)
+    begin
+        this.ClientConfig.AddQueryParameter(ParamKey, Format(Value));
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: Decimal)
+    begin
+        this.ClientConfig.AddQueryParameter(ParamKey, Format(Value));
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: Date)
+    begin
+        this.ClientConfig.AddQueryParameter(ParamKey, Format(Value, 0, 9));
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: DateTime)
+    begin
+        this.ClientConfig.AddQueryParameter(ParamKey, Format(Value, 0, 9));
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Value: Time)
+    begin
+        this.ClientConfig.AddQueryParameter(ParamKey, Format(Value, 0, 9));
+    end;
+
+    procedure AddQueryParameter(ParamKey: Text; Values: List of [Text])
+    var
+        Value: Text;
+        CombinedValue: Text;
+        IsFirst: Boolean;
+    begin
+        if (ParamKey = '') or (Values.Count = 0) then
+            exit;
+        IsFirst := true;
+        foreach Value in Values do begin
+            if Value <> '' then begin
+                if not IsFirst then
+                    CombinedValue += ','
+                else
+                    IsFirst := false;
+                CombinedValue += Value;
+            end;
+        end;
+        if CombinedValue <> '' then
+            this.ClientConfig.AddQueryParameter(ParamKey, CombinedValue);
+    end;
+
     procedure HandleRequest()
     var
         RestClient: Codeunit System.RestClient."Rest Client";
         RqstMessage: Codeunit System.RestClient."Http Request Message";
         RspMessage: Codeunit System.RestClient."Http Response Message";
     begin
+        if (this.ClientConfig.HttpHandlerSet()) then
+            RestClient.Create(this.ClientConfig.HttpHandler())
+        else
+            RestClient.Create();
         RqstMessage := this.RequestMessage();
         RspMessage := RestClient.Send(RqstMessage);
         this.ClientConfig.Client().Response(RspMessage);

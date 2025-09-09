@@ -2,15 +2,20 @@ namespace CABQR.Kiota.Client;
 
 using CABQR.Kiota.Definitions;
 using CABQR.Kiota.Utilities;
+using System.Reflection;
+using System.RestClient;
 
 codeunit 72337301 "Kiota ClientConfig"
 {
     var
         _Authorization: Codeunit "Kiota API Authorization";
         _RequestHelper: Codeunit "RequestHelper";
+        _HttpHandler: Interface "Http Client Handler";
         _CustomHeaders: Dictionary of [Text, Text];
+        _QueryParameters: Dictionary of [Text, Text];
         _Client: Interface "Kiota IApiClient";
         _BaseURL: Text;
+        CustomHttpHandlerSet: Boolean;
 
     procedure BaseURL(URL: Text)
     begin
@@ -92,5 +97,59 @@ codeunit 72337301 "Kiota ClientConfig"
                 NewHeaders.Add(HeaderName, HeaderValue);
         end;
         exit(NewHeaders);
+    end;
+
+    procedure AddQueryParameter(ParamName: Text; ParamValue: Text)
+    begin
+        if not this._QueryParameters.ContainsKey(ParamName) then
+            this._QueryParameters.Add(ParamName, ParamValue)
+        else
+            this._QueryParameters.Set(ParamName, ParamValue);
+    end;
+
+    procedure BaseUrlWithParams(): Text
+    var
+        FirstParam: Boolean;
+        EncodedValue: Text;
+        FullUrl: Text;
+        ParamName, ParamValue : Text;
+    begin
+        FullUrl := this._BaseURL;
+        FirstParam := true;
+
+        foreach ParamName in this._QueryParameters.Keys() do begin
+            ParamValue := this._QueryParameters.Get(ParamName);
+            EncodedValue := this.UrlEncode(ParamValue);
+            if FirstParam then begin
+                FullUrl += '?' + ParamName + '=' + EncodedValue;
+                FirstParam := false;
+            end else
+                FullUrl += '&' + ParamName + '=' + EncodedValue;
+        end;
+
+        exit(FullUrl);
+    end;
+
+    local procedure UrlEncode(Value: Text): Text
+    var
+        TypeHelper: Codeunit "Type Helper";
+    begin
+        exit(TypeHelper.UriEscapeDataString(Value));
+    end;
+
+    internal procedure HttpHandler(): Interface "Http Client Handler"
+    begin
+        exit(this._HttpHandler);
+    end;
+
+    procedure HttpHandler(HttpHandlerImplementation: Interface "Http Client Handler")
+    begin
+        this._HttpHandler := HttpHandlerImplementation;
+        this.CustomHttpHandlerSet := true;
+    end;
+
+    procedure HttpHandlerSet(): Boolean
+    begin
+        exit(this.CustomHttpHandlerSet);
     end;
 }
