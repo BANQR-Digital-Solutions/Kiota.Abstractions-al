@@ -8,14 +8,15 @@ using System.RestClient;
 codeunit 72337301 "Kiota ClientConfig"
 {
     var
-        _Authorization: Codeunit "Kiota API Authorization";
         _RequestHelper: Codeunit "RequestHelper";
-        _HttpHandler: Interface "Http Client Handler";
+        _AuthenticationSet: Boolean;
+        CustomHttpHandlerSet: Boolean;
         _CustomHeaders: Dictionary of [Text, Text];
         _QueryParameters: Dictionary of [Text, Text];
+        _Authorization: Interface "Http Authentication";
         _Client: Interface "Kiota IApiClient";
+        _HttpHandler: Interface "Http Client Handler";
         _BaseURL: Text;
-        CustomHttpHandlerSet: Boolean;
 
     procedure BaseURL(URL: Text)
     begin
@@ -37,16 +38,21 @@ codeunit 72337301 "Kiota ClientConfig"
 
     procedure IsInitialized(): Boolean
     begin
-        exit(this._Authorization.IsInitialized());
+        exit(this._AuthenticationSet);
     end;
 
-    procedure Authorization(NewAuthorization: Codeunit "Kiota API Authorization")
+    procedure Authorization(NewAuthorization: Interface "Http Authentication")
     begin
         this._Authorization := NewAuthorization;
+        this._AuthenticationSet := true;
     end;
 
-    procedure Authorization(): Codeunit "Kiota API Authorization"
+    procedure Authorization(): Interface "Http Authentication"
+    var
+        AuthorizationNotInitializedErr: Label 'Authorization not initialized.';
     begin
+        if not this._AuthenticationSet then
+            Error(AuthorizationNotInitializedErr);
         exit(this._Authorization);
     end;
 

@@ -132,9 +132,9 @@ codeunit 72337302 "Kiota RequestHandler"
 
     procedure AddQueryParameter(ParamKey: Text; Values: List of [Text])
     var
-        Value: Text;
-        CombinedValue: Text;
         IsFirst: Boolean;
+        CombinedValue: Text;
+        Value: Text;
     begin
         if (ParamKey = '') or (Values.Count = 0) then
             exit;
@@ -159,7 +159,7 @@ codeunit 72337302 "Kiota RequestHandler"
         RspMessage: Codeunit System.RestClient."Http Response Message";
     begin
         if (this.ClientConfig.HttpHandlerSet()) then
-            RestClient.Create(this.ClientConfig.HttpHandler())
+            RestClient.Create(this.ClientConfig.HttpHandler(), this.ClientConfig.Authorization())
         else
             RestClient.Create();
         RqstMessage := this.RequestMessage();
